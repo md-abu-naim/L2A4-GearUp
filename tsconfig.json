@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
+    "outDir": "./dist/server.js",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "target": "ES2023",
