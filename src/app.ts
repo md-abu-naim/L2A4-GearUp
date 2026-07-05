@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 app.get('/', async (req: Request, res: Response) => {
-    res.send('Hello. Welcom to my GearUp')
+    res.send('Hello. Welcom to my GearUp!')
 })
 
 export default app
