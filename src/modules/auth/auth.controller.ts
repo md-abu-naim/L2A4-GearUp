@@ -67,7 +67,20 @@ const refreshToken = async (req: Request, res: Response) => {
     })
 }
 
+const getMyProfile = async (req: Request, res: Response) => {
+    const userId = req.user?.id
+
+    const user = await authServices.getMyProfileFromDB(userId as string)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'My Profile Retrived Successfully',
+        data: { user }
+    })
+}
+
 export const authController = {
     createUser, loginUser,
-    refreshToken
+    refreshToken, getMyProfile
 }
