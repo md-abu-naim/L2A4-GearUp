@@ -1,8 +1,9 @@
 import config from "../../config";
 import { prisma } from "../../lib/prisma"
 import bcrypt from "bcryptjs";
+import { ICreatUser, ILoginUser } from "./auth.interface";
 
-const createUserIntoDB = async(payload: any) => {
+const createUserIntoDB = async(payload: ICreatUser) => {
     const {name, email, password} = payload
     
     const isUserExists = await prisma.user.findUnique({
@@ -29,6 +30,33 @@ const createUserIntoDB = async(payload: any) => {
     return user
 }
 
+const loginUserIntoDB = async(payload: ILoginUser) => {
+    const {email, password} = payload
+
+    const user = await prisma.user.findUniqueOrThrow({
+        where: { email }
+    })
+
+    if (user.status === "SUSPENDED") {
+        throw new Error('Your account has been blocked. Pleas contact support')
+    }
+
+    const isMatchedPassword = await bcrypt.compare(password, user.password)
+
+    if (!isMatchedPassword) {
+        throw new Error('Password is Incorrect')
+    }
+
+    const jwtPayload = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+    }
+
+    return jwtPayload
+}
+
 export const authServices = {
-    createUserIntoDB
+    createUserIntoDB, loginUserIntoDB
 }

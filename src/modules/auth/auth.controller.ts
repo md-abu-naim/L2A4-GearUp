@@ -17,6 +17,20 @@ const createUser = async(req: Request, res: Response) => {
     })
 }
 
+const loginUser = async(req: Request, res: Response) => {
+    const payload = req.body
+    console.log(payload);
+
+    const user = await authServices.loginUserIntoDB(payload)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: 'User Login Successfully',
+        data: { user }
+    })
+}
+
 export const authController = {
-    createUser
+    createUser, loginUser
 }
