@@ -1,17 +1,17 @@
 enum UserRole {
-    CUSTOMER
-    PROVIDER
-    ADMIN
+  CUSTOMER
+  PROVIDER
+  ADMIN
 }
 
 enum UserStatus {
-    ACTIVE
-    SUSPENDED
+  ACTIVE
+  SUSPENDED
 }
 
 enum GearStatus {
-    AVAILABLE
-    OUT_OF_STOCK
+  AVAILABLE
+  OUT_OF_STOCK
 }
 
 enum RentalStatus {
