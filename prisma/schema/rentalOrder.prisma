@@ -1,0 +1,23 @@
+model RentalOrder {
+  id            String         @id @default(uuid())
+
+  customerId    String
+  customer      Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  gearItemId    String
+  gearItem      GearItem       @relation(fields: [gearItemId], references: [id])
+
+  quantity      Int
+  startDate     DateTime
+  endDate       DateTime
+  totalPrice    Float
+
+  status        RentalStatus   @default(PLACED)
+
+  payment       Payment?
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@map("rentalOrders")
+}
