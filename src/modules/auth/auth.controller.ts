@@ -47,6 +47,7 @@ const loginUser = async (req: Request, res: Response) => {
 
 
 const refreshToken = async (req: Request, res: Response) => {
+    console.log(req.user);
     const refreshToken = req.cookies.refreshToken
 
     const { accessToken } = await authServices.refreshToken(refreshToken)
