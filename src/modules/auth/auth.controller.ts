@@ -3,7 +3,7 @@ import { authServices } from "./auth.services"
 import { sendResponse } from "../../utils/sendResponse"
 import httpStatus from "http-status";
 
-const createUser = async(req: Request, res: Response) => {
+const createUser = async (req: Request, res: Response) => {
     const payload = req.body
     console.log(payload, 'from controller');
     const user = await authServices.createUserIntoDB(payload)
@@ -17,20 +17,56 @@ const createUser = async(req: Request, res: Response) => {
     })
 }
 
-const loginUser = async(req: Request, res: Response) => {
+const loginUser = async (req: Request, res: Response) => {
     const payload = req.body
     console.log(payload);
 
-    const user = await authServices.loginUserIntoDB(payload)
+    const { accessToken, refreshToken } = await authServices.loginUserIntoDB(payload)
+
+    res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'none',
+        maxAge: 1000 * 60 * 60 * 24
+    })
+
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'none',
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    })
 
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.CREATED,
         message: 'User Login Successfully',
-        data: { user }
+        data: { accessToken, refreshToken }
+    })
+}
+
+
+const refreshToken = async (req: Request, res: Response) => {
+    const refreshToken = req.cookies.refreshToken
+
+    const { accessToken } = await authServices.refreshToken(refreshToken)
+
+    res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'none',
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    })
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Token Refreshed Successfully',
+        data: { accessToken }
     })
 }
 
 export const authController = {
-    createUser, loginUser
+    createUser, loginUser,
+    refreshToken
 }
