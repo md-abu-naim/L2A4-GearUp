@@ -1,9 +1,10 @@
-model Customer {
+model User {
     id           String     @id @default(uuid())
     name         String
     email        String     @unique
+    password     String
     role         UserRole   @default(CUSTOMER)
-    staus        UserStatus @default(ACTIVE)
+    status       UserStatus @default(ACTIVE)
     phone        String?
     profileImage String?
 
@@ -15,5 +16,5 @@ model Customer {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@map("customers")
+    @@map("users")
 }

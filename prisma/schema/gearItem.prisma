@@ -8,7 +8,7 @@ model GearItem {
     status      GearStatus @default(AVAILABLE)
 
     providerId String
-    provider   Customer @relation(fields: [providerId], references: [id], onDelete: Cascade)
+    provider   User   @relation(fields: [providerId], references: [id], onDelete: Cascade)
 
     categoryId String
     category   Category @relation(fields: [categoryId], references: [id])

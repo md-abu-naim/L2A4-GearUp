@@ -4,7 +4,7 @@ model Review {
   comment       String
 
   customerId    String
-  customer      Customer        @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [customerId], references: [id], onDelete: Cascade)
 
   gearItemId    String
   gearItem      GearItem    @relation(fields: [gearItemId], references: [id], onDelete: Cascade)

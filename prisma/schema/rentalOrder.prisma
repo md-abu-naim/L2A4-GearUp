@@ -2,7 +2,7 @@ model RentalOrder {
   id            String         @id @default(uuid())
 
   customerId    String
-  customer      Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [customerId], references: [id], onDelete: Cascade)
 
   gearItemId    String
   gearItem      GearItem       @relation(fields: [gearItemId], references: [id])

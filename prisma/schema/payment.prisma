@@ -6,7 +6,7 @@ model Payment {
   rentalOrder     RentalOrder       @relation(fields: [rentalOrderId], references: [id], onDelete: Cascade)
 
   customerId      String
-  customer        Customer              @relation(fields: [customerId], references: [id])
+  user            User              @relation(fields: [customerId], references: [id])
 
   amount          Float
   status          PaymentStatus     @default(PENDING)
