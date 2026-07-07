@@ -10,7 +10,7 @@ const getAllUsers = async (req: Request, res: Response) => {
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,
-            message: 'My Profile Retrived Successfully',
+            message: 'Users Retrived Successfully',
             data: { users }
         })
 
@@ -34,7 +34,7 @@ const updateUser = async (req: Request, res: Response) => {
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,
-            message: 'User Updated Successfully',
+            message: 'User Status Updated Successfully',
             data: { user }
         })
 
