@@ -5,9 +5,9 @@ import { ICreatUser, ILoginUser } from "./auth.interface";
 import jwt, { JwtPayload, SignOptions } from "jsonwebtoken"
 import { jwtUtils } from "../../utils/jwt";
 
-const createUserIntoDB = async(payload: ICreatUser) => {
-    const {name, email, password} = payload
-    
+const createUserIntoDB = async (payload: ICreatUser) => {
+    const { name, email, password, role, status, phone, profileImage } = payload
+
     const isUserExists = await prisma.user.findUnique({
         where: { email }
     })
@@ -22,7 +22,11 @@ const createUserIntoDB = async(payload: ICreatUser) => {
         data: {
             name,
             email,
-            password: hassedPassword
+            password: hassedPassword,
+            role,
+            status,
+            phone,
+            profileImage
         },
         omit: {
             password: true
@@ -32,8 +36,8 @@ const createUserIntoDB = async(payload: ICreatUser) => {
     return user
 }
 
-const loginUserIntoDB = async(payload: ILoginUser) => {
-    const {email, password} = payload
+const loginUserIntoDB = async (payload: ILoginUser) => {
+    const { email, password } = payload
 
     const user = await prisma.user.findUniqueOrThrow({
         where: { email }
@@ -60,33 +64,33 @@ const loginUserIntoDB = async(payload: ILoginUser) => {
 
     const refreshToken = jwtUtils.createToken(jwtPayload, config.jwt_refresh_secret, config.jwt_refresh_expires_in as SignOptions)
 
-    return {accessToken, refreshToken}
+    return { accessToken, refreshToken }
 }
 
-const refreshToken = async (refreshToken : string) => {
+const refreshToken = async (refreshToken: string) => {
     const verifiedRefreshToken = jwtUtils.verifyToken(refreshToken, config.jwt_refresh_secret);
 
-    if(!verifiedRefreshToken.success){
+    if (!verifiedRefreshToken.success) {
         throw new Error(verifiedRefreshToken.error)
     }
 
-    const {id} = verifiedRefreshToken.data as JwtPayload;
+    const { id } = verifiedRefreshToken.data as JwtPayload;
 
     const user = await prisma.user.findUniqueOrThrow({
-        where : {
+        where: {
             id
         }
     })
 
-    if(user.status === "SUSPENDED"){
+    if (user.status === "SUSPENDED") {
         throw new Error("User is SUSPENDED!")
     }
 
     const jwtPayload = {
         id,
-        name : user.name,
-        email : user.email,
-        role : user.role
+        name: user.name,
+        email: user.email,
+        role: user.role
     }
 
     const accessToken = jwtUtils.createToken(
@@ -95,10 +99,10 @@ const refreshToken = async (refreshToken : string) => {
         config.jwt_access_expires_in as SignOptions
     );
 
-    return {accessToken}
+    return { accessToken }
 }
 
-const getMyProfileFromDB = async(userId: string) => {
+const getMyProfileFromDB = async (userId: string) => {
     const user = await prisma.user.findUnique({
         where: {
             id: userId

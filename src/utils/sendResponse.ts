@@ -10,8 +10,9 @@ type TResponse<T> = {
     success: boolean,
     statusCode: number,
     message: string,
-    data: T,
-    meta?: TMeta
+    data?: T,
+    meta?: TMeta,
+    error?: any
 }
 
 export const sendResponse = <T>(res: Response, data: TResponse<T>) => {
@@ -20,6 +21,7 @@ export const sendResponse = <T>(res: Response, data: TResponse<T>) => {
         statusCode: data.statusCode,
         message: data.message,
         data: data.data,
-        meta: data.meta
+        meta: data.meta,
+        error: data.error
     })
 }

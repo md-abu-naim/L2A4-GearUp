@@ -1,10 +1,10 @@
-import { UserStatus } from "../../../generated/prisma/enums"
+import { UserRole, UserStatus } from "../../../generated/prisma/enums"
 
 export interface ICreatUser {
     name: string,
     email: string,
     password: string,
-    role?: string
+    role?: UserRole
     status?: UserStatus,
     phone?: string,
     profileImage?: string,

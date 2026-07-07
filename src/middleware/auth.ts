@@ -4,6 +4,7 @@ import config from "../config/index.js";
 import { UserRole } from "../../generated/prisma/enums.js";
 import { jwtUtils } from "../utils/jwt.js";
 import { prisma } from "../lib/prisma.js";
+import httpStatus from "http-status";
 
 declare global {
     namespace Express {
@@ -18,7 +19,7 @@ declare global {
     }
 }
 
-const auth = async (req: Request, res: Response, next: NextFunction) => {
+const auth = (...roles: UserRole[]) => async (req: Request, res: Response, next: NextFunction) => {
     try {
         const token = req.cookies.accessToken ? req.cookies.accessToken
             : req.headers.authorization?.startsWith("Bearer") ? req.headers.authorization?.split(" ")[1]
@@ -52,6 +53,14 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
             res.status(401).json({
                 success: false,
                 message: "User not found. Pleas login again",
+            })
+        }
+
+        if (roles?.length && !roles.includes(role)) {
+            res.status(httpStatus.FORBIDDEN).json({
+                success: false,
+                statusCode: httpStatus.FORBIDDEN,
+                message: 'Forbidden. You dont have permission to access this recource'
             })
         }
 
