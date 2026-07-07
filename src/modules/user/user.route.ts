@@ -6,5 +6,6 @@ import { userController } from "./user.controller.js";
 const router = Router()
 
 router.patch('/profile', auth(UserRole.ADMIN, UserRole.CUSTOMER, UserRole.PROVIDER), userController.updateUserProfile)
+router.delete('/profile', auth(UserRole.ADMIN, UserRole.CUSTOMER, UserRole.PROVIDER), userController.deleteUser)
 
 export const userRouters = router

@@ -2,7 +2,7 @@ import config from "../../config/index.js";
 import { prisma } from "../../lib/prisma.js"
 import bcrypt from "bcryptjs";
 import { ICreatUser, ILoginUser } from "./auth.interface.js";
-import jwt, { JwtPayload, SignOptions } from "jsonwebtoken"
+import { JwtPayload, SignOptions } from "jsonwebtoken"
 import { jwtUtils } from "../../utils/jwt.js";
 
 const createUserIntoDB = async (payload: ICreatUser) => {
