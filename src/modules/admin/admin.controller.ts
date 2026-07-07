@@ -4,15 +4,24 @@ import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status";
 
 const getAllUsers = async (req: Request, res: Response) => {
+    try {
+        const users = await adminServices.getAllUsersFromDB()
 
-    const users = await adminServices.getAllUsersFromDB()
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: 'My Profile Retrived Successfully',
+            data: { users }
+        })
 
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: 'My Profile Retrived Successfully',
-        data: { users }
-    })
+    } catch (error: any) {
+        sendResponse(res, {
+            statusCode: 500,
+            success: false,
+            message: error.message,
+            error: error
+        })
+    }
 }
 
 const updateUser = async (req: Request, res: Response) => {
