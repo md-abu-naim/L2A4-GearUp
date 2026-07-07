@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { adminServices } from "./admin.services";
-import { sendResponse } from "../../utils/sendResponse";
+import { adminServices } from "./admin.services.js";
+import { sendResponse } from "../../utils/sendResponse.js";
 import httpStatus from "http-status";
 
 const getAllUsers = async (req: Request, res: Response) => {

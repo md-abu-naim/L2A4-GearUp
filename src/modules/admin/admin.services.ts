@@ -1,6 +1,6 @@
-import { UserStatus } from "../../../generated/prisma/enums"
-import { prisma } from "../../lib/prisma"
-import { IUpdateUser } from "./admin.interface"
+import { UserStatus } from "../../../generated/prisma/enums.js"
+import { prisma } from "../../lib/prisma.js"
+import { IUpdateUser } from "./admin.interface.js"
 
 const getAllUsersFromDB = async () => {
     const users = await prisma.user.findMany({

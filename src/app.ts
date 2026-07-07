@@ -1,9 +1,9 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors"
 import cookieParser from "cookie-parser";
-import config from "./config";
-import { authRouters } from "./modules/auth/auth.route";
-import { adminRouters } from "./modules/admin/admin.route";
+import config from "./config/index.js";
+import { authRouters } from "./modules/auth/auth.route.js";
+import { adminRouters } from "./modules/admin/admin.route.js";
 
 const app: Application = express()
 
@@ -22,4 +22,6 @@ app.get('/', async (req: Request, res: Response) => {
 
 app.use('/api/auth', authRouters)
 app.use('/api/admin', adminRouters)
+
+
 export default app

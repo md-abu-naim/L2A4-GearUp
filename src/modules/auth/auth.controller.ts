@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import { authServices } from "./auth.services"
-import { sendResponse } from "../../utils/sendResponse"
+import { authServices } from "./auth.services.js"
+import { sendResponse } from "../../utils/sendResponse.js"
 import httpStatus from "http-status";
 
 const createUser = async (req: Request, res: Response) => {
