@@ -6,6 +6,7 @@ import { authRouters } from "./modules/auth/auth.route.js";
 import { adminRouters } from "./modules/admin/admin.route.js";
 import { userRouters } from "./modules/user/user.route.js";
 import { categoryRouters } from "./modules/category/category.route.js";
+import { notFound } from "./middleware/notFound.js";
 
 const app: Application = express()
 
@@ -26,5 +27,8 @@ app.use('/api/auth', authRouters)
 app.use('/api/users', userRouters)
 app.use('/api/admin', adminRouters)
 app.use('/api/categories', categoryRouters)
+
+
+app.use(notFound)
 
 export default app
