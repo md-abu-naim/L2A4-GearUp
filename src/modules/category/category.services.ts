@@ -19,6 +19,16 @@ const createCategoryIntoDB = async (payload: ICreateCategory) => {
     return categroy
 }
 
+const getAllCategoriesFromDB =  async() => {
+    const categories = await prisma.category.findMany({
+        orderBy:{
+            createdAt: "desc"
+        }
+    })
+
+    return categories
+}
+
 export const categoryServices = {
-    createCategoryIntoDB
+    createCategoryIntoDB, getAllCategoriesFromDB
 }

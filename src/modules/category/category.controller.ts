@@ -12,7 +12,7 @@ const createCategory = async (req: Request, res: Response) => {
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,
-            message: 'Users Retrived Successfully',
+            message: 'Category Created Successfully',
             data: { category }
         })
     } catch (error: any) {
@@ -25,6 +25,18 @@ const createCategory = async (req: Request, res: Response) => {
     }
 }
 
-export const categroyController = {
-    createCategory
+const getAllCategories = async (req: Request, res: Response) => {
+
+    const categories = await categoryServices.getAllCategoriesFromDB()
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Categories Retrived Successfully',
+        data: { categories }
+    })
 }
+
+export const categroyController = {
+    createCategory, getAllCategories
+} 
