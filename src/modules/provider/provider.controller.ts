@@ -50,6 +50,28 @@ const updateGear = async (req: Request, res: Response) => {
     }
 }
 
+const deletGear = async (req: Request, res: Response) => {
+    try {
+        const gearId = req.params.id
+
+        const gear = await providerServices.deleteGearFromDB(gearId as string)
+
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.CREATED,
+            message: 'Gear Created Successfully',
+            data: { gear }
+        })
+    } catch (error: any) {
+        sendResponse(res, {
+            statusCode: 500,
+            success: false,
+            message: error.message,
+            error: error
+        })
+    }
+}
+
 export const gearController = {
-    createGear, updateGear
+    createGear, updateGear, deletGear
 }

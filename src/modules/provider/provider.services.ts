@@ -43,6 +43,15 @@ const updateGearIntoDB = async(payload: IUpdateGear, gearId: string) => {
     return gear
 }
 
+const deleteGearFromDB = async(id: string) => {
+    await prisma.gearItem.delete({
+        where: {
+            id
+        }
+    })
+}
+
 export const providerServices = {
-    createGearIntoDB, updateGearIntoDB
+    createGearIntoDB, updateGearIntoDB,
+    deleteGearFromDB
 }
