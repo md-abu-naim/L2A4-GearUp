@@ -6,5 +6,6 @@ import { UserRole } from "../../../generated/prisma/enums.js";
 const router = Router()
 
 router.post('/gear', auth(UserRole.PROVIDER), gearController.createGear)
+router.patch('/gear/:id', auth(UserRole.PROVIDER), gearController.updateGear)
 
 export const providerRouters = router
