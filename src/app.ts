@@ -5,6 +5,7 @@ import config from "./config/index.js";
 import { authRouters } from "./modules/auth/auth.route.js";
 import { adminRouters } from "./modules/admin/admin.route.js";
 import { userRouters } from "./modules/user/user.route.js";
+import { categoryRouters } from "./modules/category/category.route.js";
 
 const app: Application = express()
 
@@ -24,6 +25,6 @@ app.get('/', async (req: Request, res: Response) => {
 app.use('/api/auth', authRouters)
 app.use('/api/users', userRouters)
 app.use('/api/admin', adminRouters)
-
+app.use('/api/categories', categoryRouters)
 
 export default app
