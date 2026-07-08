@@ -11,7 +11,7 @@ const createCategory = async (req: Request, res: Response) => {
 
         sendResponse(res, {
             success: true,
-            statusCode: httpStatus.OK,
+            statusCode: httpStatus.CREATED,
             message: 'Category Created Successfully',
             data: { category }
         })

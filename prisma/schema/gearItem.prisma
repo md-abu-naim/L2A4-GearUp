@@ -3,15 +3,16 @@ model GearItem {
     title       String
     description String?
     brand       String
-    pricePerDay String?
-    stock       Int
+    pricePerDay Int
+    stock       Int?
     status      GearStatus @default(AVAILABLE)
+    image       String?
 
     providerId String
-    provider   User   @relation(fields: [providerId], references: [id], onDelete: Cascade)
+    provider   User   @relation(fields: [providerId], references: [id])
 
-    categoryId String
-    category   Category @relation(fields: [categoryId], references: [id])
+    category String
+    categoryies   Category @relation(fields: [category], references: [name])
 
     rentals RentalOrder[]
     reviews Review[]
