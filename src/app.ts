@@ -9,6 +9,7 @@ import { categoryRouters } from "./modules/category/category.route.js";
 import { notFound } from "./middleware/notFound.js";
 import { providerRouters } from "./modules/provider/provider.route.js";
 import { gearRouters } from "./modules/gear/gear.route.js";
+import { rentalRouters } from "./modules/rental/rental.route.js";
 
 const app: Application = express()
 
@@ -29,6 +30,7 @@ app.use('/api/auth', authRouters)
 app.use('/api/users', userRouters)
 app.use('/api/categories', categoryRouters)
 app.use('/api/gear', gearRouters)
+app.use('/api/rentals', rentalRouters)
 app.use('/api/provider', providerRouters)
 app.use('/api/admin', adminRouters)
 
