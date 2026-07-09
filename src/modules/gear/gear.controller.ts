@@ -10,8 +10,8 @@ const getAllGears = async (req: Request, res: Response) => {
 
         sendResponse(res, {
             success: true,
-            statusCode: httpStatus.CREATED,
-            message: 'Category Created Successfully',
+            statusCode: httpStatus.OK,
+            message: 'Gears Retrived Successfully',
             data: { gears }
         })
 
@@ -25,6 +25,29 @@ const getAllGears = async (req: Request, res: Response) => {
     }
 }
 
+const getGearById = async (req: Request, res: Response) => {
+    try {
+        const gearId = req.params.id
+
+        const gear = await gearServices.getGearByIdFromDB(gearId as string)
+
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: 'A Gear Retrived Successfully',
+            data: { gear }
+        })
+
+    } catch (error: any) {
+        sendResponse(res, {
+            statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: error.message,
+            error: error
+        })
+    }
+}
+
 export const gearController = {
-    getAllGears
+    getAllGears, getGearById
 }

@@ -10,6 +10,16 @@ const getAllGearsFromDB = async() => {
     return gears
 }
 
+const getGearByIdFromDB = async(id: string) => {
+    const gear =await prisma.gearItem.findUnique({
+        where: {
+            id
+        }
+    })
+
+    return gear
+}
+
 export const gearServices = {
-    getAllGearsFromDB
+    getAllGearsFromDB, getGearByIdFromDB
 }

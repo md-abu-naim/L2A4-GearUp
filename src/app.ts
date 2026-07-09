@@ -28,7 +28,7 @@ app.get('/', async (req: Request, res: Response) => {
 app.use('/api/auth', authRouters)
 app.use('/api/users', userRouters)
 app.use('/api/categories', categoryRouters)
-app.use('/api/gears', gearRouters)
+app.use('/api/gear', gearRouters)
 app.use('/api/provider', providerRouters)
 app.use('/api/admin', adminRouters)
 
