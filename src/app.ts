@@ -8,6 +8,7 @@ import { userRouters } from "./modules/user/user.route.js";
 import { categoryRouters } from "./modules/category/category.route.js";
 import { notFound } from "./middleware/notFound.js";
 import { providerRouters } from "./modules/provider/provider.route.js";
+import { gearRouters } from "./modules/gear/gear.route.js";
 
 const app: Application = express()
 
@@ -27,6 +28,7 @@ app.get('/', async (req: Request, res: Response) => {
 app.use('/api/auth', authRouters)
 app.use('/api/users', userRouters)
 app.use('/api/categories', categoryRouters)
+app.use('/api/gears', gearRouters)
 app.use('/api/provider', providerRouters)
 app.use('/api/admin', adminRouters)
 

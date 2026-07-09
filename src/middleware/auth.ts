@@ -57,7 +57,7 @@ const auth = (...roles: UserRole[]) => async (req: Request, res: Response, next:
         }
 
         if (roles?.length && !roles.includes(role)) {
-            res.status(httpStatus.FORBIDDEN).json({
+           return res.status(httpStatus.FORBIDDEN).json({
                 success: false,
                 statusCode: httpStatus.FORBIDDEN,
                 message: 'Forbidden. You dont have permission to access this recource'

@@ -72,6 +72,6 @@ const deletGear = async (req: Request, res: Response) => {
     }
 }
 
-export const gearController = {
+export const providerController = {
     createGear, updateGear, deletGear
 }
