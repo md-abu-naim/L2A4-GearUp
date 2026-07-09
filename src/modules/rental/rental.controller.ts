@@ -48,6 +48,28 @@ const getAllRentals = async (req: Request, res: Response) => {
     }
 }
 
+const getRentalById = async (req: Request, res: Response) => {
+    try {
+        const rentalId = req.params.id
+        
+        const rental = await rentalServices.getRentalByIdFromDB(rentalId as string)
+
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: 'Rental Order Retrived Successfully',
+            data: { rental }
+        })
+    } catch (error: any) {
+        sendResponse(res, {
+            statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: error.message,
+            error: error
+        })
+    }
+}
+
 export const rentalController = {
-    createRental, getAllRentals
+    createRental, getAllRentals, getRentalById
 }

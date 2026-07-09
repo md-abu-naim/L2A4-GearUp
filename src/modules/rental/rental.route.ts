@@ -7,5 +7,6 @@ const router = Router()
 
 router.post('/', auth(UserRole.ADMIN, UserRole.CUSTOMER, UserRole.PROVIDER), rentalController.createRental)
 router.get('/', auth(UserRole.ADMIN, UserRole.CUSTOMER, UserRole.PROVIDER), rentalController.getAllRentals)
+router.get('/:id', auth(UserRole.ADMIN, UserRole.CUSTOMER, UserRole.PROVIDER), rentalController.getRentalById)
 
 export const rentalRouters = router
