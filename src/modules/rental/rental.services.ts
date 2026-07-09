@@ -40,7 +40,7 @@ const createRentalIntoDB = async (payload: any, customerId: string) => {
 
     const totalPrice = gear.pricePerDay * days * payload.quantity
 
-    const rentalTransaction = await prisma.$transaction(async(tx) => {
+    const rentalTransaction = await prisma.$transaction(async (tx) => {
         const rental = await tx.rentalOrder.create({
             data: {
                 customerId,
@@ -66,10 +66,10 @@ const createRentalIntoDB = async (payload: any, customerId: string) => {
         return rental
     })
 
-    return {rentalTransaction}
+    return { rentalTransaction }
 }
 
-const getAllRentalsFromDB = async(customerId: string) => {
+const getAllRentalsFromDB = async (customerId: string) => {
     const rentals = await prisma.rentalOrder.findMany({
         where: {
             customerId
@@ -79,7 +79,7 @@ const getAllRentalsFromDB = async(customerId: string) => {
     return rentals
 }
 
-const getRentalByIdFromDB = async(rentalId: string) => {
+const getRentalByIdFromDB = async (rentalId: string) => {
     const rental = await prisma.rentalOrder.findUniqueOrThrow({
         where: {
             id: rentalId

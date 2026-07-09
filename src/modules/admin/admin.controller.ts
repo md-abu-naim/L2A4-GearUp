@@ -48,6 +48,50 @@ const updateUser = async (req: Request, res: Response) => {
     }
 }
 
+const getAllGears = async (req: Request, res: Response) => {
+    try {
+
+        const gears = await adminServices.getAllGearsFromDB()
+
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: 'Gears Retrived Successfully',
+            data: { gears }
+        })
+
+    } catch (error: any) {
+        sendResponse(res, {
+            statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: error.message,
+            error: error
+        })
+    }
+}
+
+const getAllRentals = async (req: Request, res: Response) => {
+    try {
+
+        const rentals = await adminServices.getAllRentalsFromDB()
+
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: 'Rentals Order Retrived Successfully',
+            data: { rentals }
+        })
+    } catch (error: any) {
+        sendResponse(res, {
+            statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: error.message,
+            error: error
+        })
+    }
+}
+
 export const adminController = {
-    getAllUsers, updateUser
+    getAllUsers, updateUser,
+    getAllGears, getAllRentals
 }

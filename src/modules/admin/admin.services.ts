@@ -42,6 +42,27 @@ const updateUserFromDB = async (userId: string, payload: IUpdateUser) => {
     return user
 }
 
+const getAllGearsFromDB = async() => {
+    const gears = await prisma.gearItem.findMany({
+        orderBy: {
+            createdAt: 'desc'
+        }
+    })
+
+    return gears
+}
+
+const getAllRentalsFromDB = async () => {
+    const rentals = await prisma.rentalOrder.findMany({
+        orderBy: {
+            createdAt: 'desc'
+        }
+    })
+
+    return rentals
+}
+
 export const adminServices = {
-    getAllUsersFromDB, updateUserFromDB
+    getAllUsersFromDB, updateUserFromDB,
+    getAllGearsFromDB, getAllRentalsFromDB
 }
