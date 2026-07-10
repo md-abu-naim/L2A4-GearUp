@@ -11,6 +11,7 @@ import { providerRouters } from "./modules/provider/provider.route.js";
 import { gearRouters } from "./modules/gear/gear.route.js";
 import { rentalRouters } from "./modules/rental/rental.route.js";
 import { paymentRouters } from "./modules/payment/payment.route.js";
+import { reviewRouters } from "./modules/review/review.route.js";
 
 const app: Application = express()
 
@@ -19,10 +20,8 @@ app.use(cors({
     credentials: true
 }))
 
-app.post(
-  "/api/payment/confirm",
-  express.raw({ type: "application/json" }),
-)
+
+app.use("/api/payment/confirm", express.raw({ type: 'application/json' }))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -40,6 +39,7 @@ app.use('/api/rentals', rentalRouters)
 app.use('/api/payment', paymentRouters)
 app.use('/api/provider', providerRouters)
 app.use('/api/admin', adminRouters)
+app.use('/api/review', reviewRouters)
 
 app.use(notFound)
 

@@ -7,7 +7,6 @@ const createGear = async (req: Request, res: Response) => {
     try {
         const providerId = req.user?.id
         const payload = req.body
-        console.log(providerId);
 
         const gear = await providerServices.createGearIntoDB(payload, providerId as string)
 
@@ -108,7 +107,7 @@ const updateRentalStatus = async (req: Request, res: Response) => {
             message: 'Rental Order Status Updated Successfully',
             data: { rental }
         })
-    } catch (error:any) {
+    } catch (error: any) {
         sendResponse(res, {
             statusCode: httpStatus.INTERNAL_SERVER_ERROR,
             success: false,

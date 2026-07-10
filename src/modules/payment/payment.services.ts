@@ -1,6 +1,8 @@
+import Stripe from "stripe"
 import config from "../../config/index.js"
 import { prisma } from "../../lib/prisma.js"
 import stripe from "../../lib/stripe.js"
+import { PaymentStatus, RentalStatus } from "../../../generated/prisma/enums.js"
 
 const createPaymentSession = async (rentalOrderId: string, customerId: string) => {
     const rental = await prisma.rentalOrder.findUnique({
@@ -67,13 +69,100 @@ const createPaymentSession = async (rentalOrderId: string, customerId: string) =
         cancel_url: `${config.app_url}/payment-cancel`,
     });
 
-    return {
-        checkoutUrl: session.url,
-        sessionId: session.id,
-    };
+    return session.url
 
 }
 
+const confirmPayment = async (event: Stripe.Event) => {
+
+    if (event.type !== "checkout.session.completed") {
+        return;
+    }
+
+    const session = event.data.object as Stripe.Checkout.Session;
+
+    const rentalOrderId = session.metadata?.rentalOrderId;
+    const customerId = session.metadata?.customerId;
+
+    if (!rentalOrderId || !customerId) {
+        throw new Error("Metadata missing");
+    }
+
+    const paymentExists = await prisma.payment.findUnique({
+        where: {
+            rentalOrderId,
+        },
+    });
+
+    if (paymentExists) {
+        return;
+    }
+
+    await prisma.$transaction(async (tx) => {
+
+        await tx.payment.create({
+            data: {
+                rentalOrderId,
+                customerId,
+                amount: (session.amount_total ?? 0) / 100,
+                transactionId: session.payment_intent?.toString(),
+                status: PaymentStatus.COMPLETED,
+            },
+        });
+
+        await tx.rentalOrder.update({
+            where: {
+                id: rentalOrderId,
+            },
+            data: {
+                status: RentalStatus.PAID,
+            },
+        });
+
+    });
+
+    return;
+};
+
+const getMyPaymentsHistoryFromDB = async (customerId: string) => {
+    const payments = await prisma.payment.findMany({
+        where: {
+            customerId,
+        },
+        include: {
+            rentalOrder: {
+                include: {
+                    gearItem: true,
+                },
+            },
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    })
+
+    return payments
+}
+
+const getMyPaymentHistoryByIdFromDB = async (paymentId: string) => {
+    const payments = await prisma.payment.findUnique({
+        where: {
+            id: paymentId,
+        },
+        include: {
+            rentalOrder: {
+                include: {
+                    gearItem: true,
+                },
+            },
+        }
+    })
+
+    return payments
+}
+
 export const PaymentService = {
-    createPaymentSession
+    createPaymentSession, confirmPayment,
+    getMyPaymentsHistoryFromDB,
+    getMyPaymentHistoryByIdFromDB
 }

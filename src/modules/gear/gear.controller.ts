@@ -5,8 +5,9 @@ import { gearServices } from "./gear.services.js";
 
 const getAllGears = async (req: Request, res: Response) => {
     try {
+        const query = req.query
 
-        const gears = await gearServices.getAllGearsFromDB()
+        const gears = await gearServices.getAllGearsFromDB(query)
 
         sendResponse(res, {
             success: true,

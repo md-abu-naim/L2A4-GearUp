@@ -1,3 +1,5 @@
+import { GearStatus } from "../../../generated/prisma/enums.js"
+
 export interface IGear {
     title: string,
     description?: string,
@@ -15,5 +17,6 @@ export interface IUpdateGear {
     image?: string,
     pricePerDay?: number,
     stock?: number,
-    category?: string
+    category?: string,
+    status?: GearStatus
 }
