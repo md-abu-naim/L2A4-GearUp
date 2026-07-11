@@ -28,7 +28,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
-app.get('/', async (req: Request, res: Response) => {
+app.get('/api', async (req: Request, res: Response) => {
     res.send('Hello. Welcom to my GearUp!')
 })
 
