@@ -38,7 +38,7 @@ const updateGearIntoDB = async (payload: IUpdateGear, gearId: string) => {
         where: {
             id: gearId
         },
-        data: payload
+        data: payload,
     })
 
     return gear
@@ -47,9 +47,9 @@ const updateGearIntoDB = async (payload: IUpdateGear, gearId: string) => {
 const deleteGearFromDB = async (id: string) => {
     await prisma.gearItem.delete({
         where: {
-            id
-        }
-    })
+            id,
+        },
+    });
 }
 
 const getAllRentalsFromDB = async () => {
@@ -62,7 +62,7 @@ const getAllRentalsFromDB = async () => {
     return rentals
 }
 
-const updateRentalStatusFromDB = async ( rentalId: string, providerId: string, payload: {status: RentalStatus}) => {
+const updateRentalStatusFromDB = async (rentalId: string, providerId: string, payload: { status: RentalStatus }) => {
     const allowedFields = ["status"];
 
     const payloadKeys = Object.keys(payload);

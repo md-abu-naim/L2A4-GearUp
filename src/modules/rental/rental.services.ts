@@ -66,7 +66,7 @@ const createRentalIntoDB = async (payload: any, customerId: string) => {
         return rental
     })
 
-    return { rentalTransaction }
+    return rentalTransaction
 }
 
 const getAllRentalsFromDB = async (customerId: string) => {

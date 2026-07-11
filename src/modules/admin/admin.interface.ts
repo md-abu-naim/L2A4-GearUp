@@ -1,3 +1,13 @@
 export interface IUpdateUser {
     status: string
 }
+
+export interface ICreateCategory {
+    name: string,
+    descriptio?: string
+}
+
+export interface IUpdateCategory {
+    name?: string,
+    descriptio?: string
+}

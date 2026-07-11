@@ -5,7 +5,7 @@ model RentalOrder {
   user      User       @relation(fields: [customerId], references: [id], onDelete: Cascade)
 
   gearItemId    String
-  gearItem      GearItem       @relation(fields: [gearItemId], references: [id])
+  gearItem      GearItem       @relation(fields: [gearItemId], references: [id], onDelete: Cascade)
 
   quantity      Int
   startDate     DateTime

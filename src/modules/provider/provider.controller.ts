@@ -13,7 +13,7 @@ const createGear = async (req: Request, res: Response) => {
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.CREATED,
-            message: 'Gear Created Successfully',
+            message: 'Gear Deleted Successfully',
             data: { gear }
         })
     } catch (error: any) {

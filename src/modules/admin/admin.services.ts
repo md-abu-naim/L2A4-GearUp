@@ -1,6 +1,6 @@
 import { UserStatus } from "../../../generated/prisma/enums.js"
 import { prisma } from "../../lib/prisma.js"
-import { IUpdateUser } from "./admin.interface.js"
+import { ICreateCategory, IUpdateCategory, IUpdateUser } from "./admin.interface.js"
 
 const getAllUsersFromDB = async () => {
     const users = await prisma.user.findMany({
@@ -42,7 +42,7 @@ const updateUserFromDB = async (userId: string, payload: IUpdateUser) => {
     return user
 }
 
-const getAllGearsFromDB = async() => {
+const getAllGearsFromDB = async () => {
     const gears = await prisma.gearItem.findMany({
         orderBy: {
             createdAt: 'desc'
@@ -62,7 +62,49 @@ const getAllRentalsFromDB = async () => {
     return rentals
 }
 
+const createCategoryIntoDB = async (payload: ICreateCategory) => {
+    const isCategoryExists = await prisma.category.findUnique({
+        where: {
+            name: payload.name
+        }
+    })
+
+    if (isCategoryExists) {
+        throw new Error("Category already exists");
+    }
+
+    const categroy = await prisma.category.create({
+        data: payload
+    })
+
+    return categroy
+}
+
+const updateCategoryIntoDB = async (categoryId: string, payload: IUpdateCategory) => {
+    const category = await prisma.category.update({
+        where: {
+            id: categoryId
+        },
+        data: payload
+    })
+
+    return category
+}
+
+const deleteCategoryFromDB = async (categoryId: string) => {
+    await prisma.category.delete({
+        where: {
+            id: categoryId
+        }
+    })
+
+    return null
+}
+
+
 export const adminServices = {
     getAllUsersFromDB, updateUserFromDB,
-    getAllGearsFromDB, getAllRentalsFromDB
+    getAllGearsFromDB, getAllRentalsFromDB,
+    createCategoryIntoDB, updateCategoryIntoDB,
+    deleteCategoryFromDB
 }

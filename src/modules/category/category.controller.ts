@@ -23,6 +23,8 @@ const getAllCategories = async (req: Request, res: Response) => {
         })
     }
 }
+
+
 export const categroyController = {
     getAllCategories
 } 

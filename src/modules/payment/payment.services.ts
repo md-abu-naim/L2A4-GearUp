@@ -125,21 +125,81 @@ const confirmPayment = async (event: Stripe.Event) => {
 };
 
 const getMyPaymentsHistoryFromDB = async (customerId: string) => {
+    // const payments = await prisma.payment.findMany({
+    //     where: {
+    //         customerId,
+    //     },
+    //     include: {
+    //         rentalOrder: {
+    //             customerId: true,
+    //             gearItemId: true,
+    //             quantity: true,
+    //             startDate: true,
+    //             endDate: true,
+    //             totalPrice: true,
+    //             status: true,
+    //             include: {
+    //                 gearItem: {
+    //                     select: {
+    //                         title: true,
+    //                         description: true,
+    //                         brand: true,
+    //                         pricePerDay: true,
+    //                         image: true,
+    //                         category: true,
+    //                         providerId: true
+    //                     }
+    //                 },
+    //             },
+    //         },
+    //     },
+    //     orderBy: {
+    //         createdAt: "desc",
+    //     },
+    // })
+
     const payments = await prisma.payment.findMany({
         where: {
             customerId,
         },
-        include: {
+        select: {
+            id: true,
+            amount: true,
+            status: true,
+            transactionId: true,
+            rentalOrderId: true,
+            customerId: true,
+            createdAt: true,
+            updatedAt: true,
+
             rentalOrder: {
-                include: {
-                    gearItem: true,
+                select: {
+                    customerId: true,
+                    gearItemId: true,
+                    quantity: true,
+                    startDate: true,
+                    endDate: true,
+                    totalPrice: true,
+                    status: true,
+
+                    gearItem: {
+                        select: {
+                            title: true,
+                            description: true,
+                            brand: true,
+                            pricePerDay: true,
+                            image: true,
+                            category: true,
+                            providerId: true,
+                        },
+                    },
                 },
             },
         },
         orderBy: {
             createdAt: "desc",
         },
-    })
+    });
 
     return payments
 }
@@ -149,13 +209,40 @@ const getMyPaymentHistoryByIdFromDB = async (paymentId: string) => {
         where: {
             id: paymentId,
         },
-        include: {
+        select: {
+            id: true,
+            amount: true,
+            status: true,
+            transactionId: true,
+            rentalOrderId: true,
+            customerId: true,
+            createdAt: true,
+            updatedAt: true,
+
             rentalOrder: {
-                include: {
-                    gearItem: true,
+                select: {
+                    customerId: true,
+                    gearItemId: true,
+                    quantity: true,
+                    startDate: true,
+                    endDate: true,
+                    totalPrice: true,
+                    status: true,
+
+                    gearItem: {
+                        select: {
+                            title: true,
+                            description: true,
+                            brand: true,
+                            pricePerDay: true,
+                            image: true,
+                            category: true,
+                            providerId: true,
+                        },
+                    },
                 },
             },
-        }
+        },
     })
 
     return payments

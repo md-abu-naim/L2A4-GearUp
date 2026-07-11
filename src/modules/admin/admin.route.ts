@@ -12,4 +12,9 @@ router.get('/gear', auth(UserRole.ADMIN), adminController.getAllUsers)
 
 router.get('/rentals', auth(UserRole.ADMIN), adminController.getAllRentals)
 
+router.post('/categories', auth(UserRole.ADMIN), adminController.createCategory)
+router.patch('/categories/:id', auth(UserRole.ADMIN), adminController.updateCategory)
+router.delete('/categories/:id', auth(UserRole.ADMIN), adminController.deleteCategory)
+
+
 export const adminRouters = router

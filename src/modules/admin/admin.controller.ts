@@ -91,7 +91,78 @@ const getAllRentals = async (req: Request, res: Response) => {
     }
 }
 
+
+const createCategory = async (req: Request, res: Response) => {
+    try {
+        const payload = req.body
+
+        const category = await adminServices.createCategoryIntoDB(payload)
+
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.CREATED,
+            message: 'Category Created Successfully',
+            data: { category }
+        })
+    } catch (error: any) {
+        sendResponse(res, {
+            statusCode: 500,
+            success: false,
+            message: error.message,
+            error: error
+        })
+    }
+}
+
+const updateCategory = async (req: Request, res: Response) => {
+    try {
+        const categoryId = req.params.id
+        const payload = req.body
+
+        const category = await adminServices.updateCategoryIntoDB(categoryId as string, payload)
+
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: 'Category Updated Successfully',
+            data: { category }
+        })
+
+    } catch (error: any) {
+        sendResponse(res, {
+            statusCode: 500,
+            success: false,
+            message: error.message,
+            error: error
+        })
+    }
+}
+
+const deleteCategory = async (req: Request, res: Response) => {
+    try {
+        const categoryId = req.params.id
+
+        const category = await adminServices.deleteCategoryFromDB(categoryId as string)
+
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: 'Category Deleted Successfully',
+            data: { category }
+        })
+
+    } catch (error: any) {
+        sendResponse(res, {
+            statusCode: 500,
+            success: false,
+            message: error.message,
+            error: error
+        })
+    }
+}
+
 export const adminController = {
     getAllUsers, updateUser,
-    getAllGears, getAllRentals
+    getAllGears, getAllRentals,
+    createCategory, updateCategory, deleteCategory
 }
