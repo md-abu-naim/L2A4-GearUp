@@ -13,7 +13,7 @@ const createGear = async (req: Request, res: Response) => {
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.CREATED,
-            message: 'Gear Deleted Successfully',
+            message: 'Gear Created Successfully',
             data: { gear }
         })
     } catch (error: any) {
@@ -57,8 +57,8 @@ const deletGear = async (req: Request, res: Response) => {
 
         sendResponse(res, {
             success: true,
-            statusCode: httpStatus.CREATED,
-            message: 'Gear Created Successfully',
+            statusCode: httpStatus.OK,
+            message: 'Gear Deleted Successfully',
             data: { gear }
         })
     } catch (error: any) {

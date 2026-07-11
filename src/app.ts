@@ -12,6 +12,7 @@ import { gearRouters } from "./modules/gear/gear.route.js";
 import { rentalRouters } from "./modules/rental/rental.route.js";
 import { paymentRouters } from "./modules/payment/payment.route.js";
 import { reviewRouters } from "./modules/review/review.route.js";
+import { globalErrorHandler } from "./middleware/globalErrorHandler.js";
 
 const app: Application = express()
 
@@ -43,5 +44,6 @@ app.use('/api/review', reviewRouters)
 
 
 app.use(notFound)
+app.use(globalErrorHandler)
 
 export default app

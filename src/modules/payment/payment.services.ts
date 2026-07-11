@@ -69,7 +69,10 @@ const createPaymentSession = async (rentalOrderId: string, customerId: string) =
         cancel_url: `${config.app_url}/payment-cancel`,
     });
 
-    return session.url
+    return {
+        checkoutUrl: session.url,
+        sessionId: session.id,
+    };
 
 }
 

@@ -6,6 +6,9 @@ const getAllUsersFromDB = async () => {
     const users = await prisma.user.findMany({
         omit: {
             password: true
+        },
+        orderBy: {
+            createdAt: 'desc'
         }
     })
 
