@@ -69,6 +69,9 @@ const getAllRentalsFromDB = async (customerId: string) => {
     const rentals = await prisma.rentalOrder.findMany({
         where: {
             customerId
+        },
+        include: {
+            gearItem: true,
         }
     })
 
@@ -79,6 +82,9 @@ const getRentalByIdFromDB = async (rentalId: string) => {
     const rental = await prisma.rentalOrder.findUniqueOrThrow({
         where: {
             id: rentalId
+        },
+        include: {
+            gearItem: true,
         }
     })
 
