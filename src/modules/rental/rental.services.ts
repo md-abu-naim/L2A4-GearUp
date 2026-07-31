@@ -36,10 +36,6 @@ const createRentalIntoDB = async (payload: any, customerId: string) => {
         throw new Error("End date must be greater than start date")
     }
 
-    const days = Math.ceil((end.getTime() - start.getTime()) / (100 * 60 * 60 * 24) + 1)
-
-    const totalPrice = gear.pricePerDay * days * payload.quantity
-
     const rentalTransaction = await prisma.$transaction(async (tx) => {
         const rental = await tx.rentalOrder.create({
             data: {
@@ -48,7 +44,7 @@ const createRentalIntoDB = async (payload: any, customerId: string) => {
                 quantity: payload.quantity,
                 startDate: start,
                 endDate: end,
-                totalPrice
+                totalPrice: payload.totalPrice
             }
         })
 
