@@ -6,13 +6,14 @@ import httpStatus from "http-status";
 const createUser = async (req: Request, res: Response) => {
     try {
         const payload = req.body
-        const user = await authServices.createUserIntoDB(payload)
+
+        const data = await authServices.createUserIntoDB(payload)
 
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.CREATED,
             message: 'User Registered Successfully',
-            data: { user }
+            data: data
         })
 
     } catch (error: any) {
