@@ -4,10 +4,11 @@ import { prisma } from "../../lib/prisma.js"
 import stripe from "../../lib/stripe.js"
 import { PaymentStatus, RentalStatus } from "../../../generated/prisma/enums.js"
 
-const createPaymentSession = async (rentalOrderId: string, customerId: string) => {
+const createPaymentSession = async (rentalId: string, customerId: string) => {
+
     const rental = await prisma.rentalOrder.findUnique({
         where: {
-            id: rentalOrderId
+            id: rentalId
         }
     })
 
@@ -26,7 +27,7 @@ const createPaymentSession = async (rentalOrderId: string, customerId: string) =
 
     const payment = await prisma.payment.findUnique({
         where: {
-            rentalOrderId
+            id: rentalId
         }
     })
 
@@ -65,9 +66,10 @@ const createPaymentSession = async (rentalOrderId: string, customerId: string) =
         },
 
 
-        success_url: `${config.app_url}/payment-success?rentalId=${rental.id}`,
+        success_url: `${config.app_url}/dashboard/payment-success?rentalId=${rental.id}`,
         cancel_url: `${config.app_url}/payment-cancel`,
     });
+
 
     return {
         checkoutUrl: session.url,
@@ -77,6 +79,8 @@ const createPaymentSession = async (rentalOrderId: string, customerId: string) =
 }
 
 const confirmPayment = async (event: Stripe.Event) => {
+    console.log("Webhook hit");
+    console.log(event.type);
 
     if (event.type !== "checkout.session.completed") {
         return;
@@ -100,6 +104,8 @@ const confirmPayment = async (event: Stripe.Event) => {
     if (paymentExists) {
         return;
     }
+
+    console.log(session.metadata);
 
     await prisma.$transaction(async (tx) => {
 
@@ -128,38 +134,6 @@ const confirmPayment = async (event: Stripe.Event) => {
 };
 
 const getMyPaymentsHistoryFromDB = async (customerId: string) => {
-    // const payments = await prisma.payment.findMany({
-    //     where: {
-    //         customerId,
-    //     },
-    //     include: {
-    //         rentalOrder: {
-    //             customerId: true,
-    //             gearItemId: true,
-    //             quantity: true,
-    //             startDate: true,
-    //             endDate: true,
-    //             totalPrice: true,
-    //             status: true,
-    //             include: {
-    //                 gearItem: {
-    //                     select: {
-    //                         title: true,
-    //                         description: true,
-    //                         brand: true,
-    //                         pricePerDay: true,
-    //                         image: true,
-    //                         category: true,
-    //                         providerId: true
-    //                     }
-    //                 },
-    //             },
-    //         },
-    //     },
-    //     orderBy: {
-    //         createdAt: "desc",
-    //     },
-    // })
 
     const payments = await prisma.payment.findMany({
         where: {
@@ -174,7 +148,6 @@ const getMyPaymentsHistoryFromDB = async (customerId: string) => {
             customerId: true,
             createdAt: true,
             updatedAt: true,
-
             rentalOrder: {
                 select: {
                     customerId: true,

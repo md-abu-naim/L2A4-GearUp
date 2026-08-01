@@ -7,10 +7,10 @@ import config from "../../config/index.js";
 
 const createPayment = async (req: Request, res: Response) => {
     try {
-        const rentalOrderId = req.body.rentalOrderId
-        const customerId = req.user?.id
+        const {rentalId} = req.body
+        const customerId = req.user?.id;
 
-        const payment = await PaymentService.createPaymentSession(rentalOrderId as string, customerId as string)
+        const payment = await PaymentService.createPaymentSession(rentalId, customerId as string)
 
         sendResponse(res, {
             statusCode: httpStatus.OK,
@@ -67,7 +67,7 @@ const getMyPaymentsHistory = async (req: Request, res: Response) => {
             success: true,
             statusCode: 200,
             message: "Payments History Retrived Successfully",
-            data: {payments}
+            data: { payments }
         })
     } catch (error: any) {
         sendResponse(res, {
@@ -89,7 +89,7 @@ const getMyPaymentsHistoryById = async (req: Request, res: Response) => {
             success: true,
             statusCode: 200,
             message: "Payment History Retrived Successfully",
-            data: {payment}
+            data: { payment }
         })
     } catch (error: any) {
         sendResponse(res, {
