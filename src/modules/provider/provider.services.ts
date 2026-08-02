@@ -33,6 +33,25 @@ const createGearIntoDB = async (payload: IGear, providerId: string) => {
     return gear
 }
 
+const getGearsFromDB = async () => {
+    const gears = await prisma.gearItem.findMany({
+        include: {
+            provider: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+
+    return gears
+}
+
 const updateGearIntoDB = async (payload: IUpdateGear, gearId: string) => {
     const gear = await prisma.gearItem.update({
         where: {
@@ -56,6 +75,9 @@ const getAllRentalsFromDB = async () => {
     const rentals = await prisma.rentalOrder.findMany({
         orderBy: {
             createdAt: 'desc'
+        },
+        include: {
+            gearItem: true
         }
     })
 
@@ -109,5 +131,5 @@ const updateRentalStatusFromDB = async (rentalId: string, providerId: string, pa
 export const providerServices = {
     createGearIntoDB, updateGearIntoDB,
     deleteGearFromDB, getAllRentalsFromDB,
-    updateRentalStatusFromDB
+    updateRentalStatusFromDB, getGearsFromDB
 }

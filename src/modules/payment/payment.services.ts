@@ -79,8 +79,6 @@ const createPaymentSession = async (rentalId: string, customerId: string) => {
 }
 
 const confirmPayment = async (event: Stripe.Event) => {
-    console.log("Webhook hit");
-    console.log(event.type);
 
     if (event.type !== "checkout.session.completed") {
         return;

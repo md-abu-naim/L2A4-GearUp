@@ -6,10 +6,11 @@ import { providerController } from "./provider.controller.js";
 const router = Router()
 
 router.post('/gear', auth(UserRole.PROVIDER), providerController.createGear)
+router.get('/gear', auth(UserRole.PROVIDER), providerController.getGears)
 router.patch('/gear/:id', auth(UserRole.PROVIDER), providerController.updateGear)
 router.delete('/gear/:id', auth(UserRole.PROVIDER), providerController.deletGear)
 
-router.get('/rentals', auth(UserRole.PROVIDER), providerController.getAllRentals)
+router.get('/rentals', auth(UserRole.PROVIDER, UserRole.ADMIN), providerController.getAllRentals)
 router.patch('/rentals/:id', auth(UserRole.PROVIDER), providerController.updateRentalStatus)
 
 export const providerRouters = router

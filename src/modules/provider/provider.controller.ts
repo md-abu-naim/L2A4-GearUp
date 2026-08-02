@@ -26,6 +26,27 @@ const createGear = async (req: Request, res: Response) => {
     }
 }
 
+const getGears = async (req: Request, res: Response) => {
+    try {
+
+        const gears = await providerServices.getGearsFromDB()
+
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: 'Rentals Order Retrived Successfully',
+            data:  gears 
+        })
+    } catch (error: any) {
+        sendResponse(res, {
+            statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: error.message,
+            error: error
+        })
+    }
+}
+
 const updateGear = async (req: Request, res: Response) => {
     try {
         const gearId = req.params.id
@@ -119,5 +140,5 @@ const updateRentalStatus = async (req: Request, res: Response) => {
 
 export const providerController = {
     createGear, updateGear, deletGear,
-    getAllRentals, updateRentalStatus
+    getAllRentals, updateRentalStatus, getGears
 }
