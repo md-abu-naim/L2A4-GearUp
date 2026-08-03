@@ -2,18 +2,66 @@ import { UserStatus } from "../../../generated/prisma/enums.js"
 import { prisma } from "../../lib/prisma.js"
 import { ICreateCategory, IUpdateCategory, IUpdateUser } from "./admin.interface.js"
 
-const getAllUsersFromDB = async () => {
+type Query = {
+    search?: string;
+    page?: string;
+    limit?: string;
+};
+
+const getAllUsersFromDB = async (query: Query) => {
+    const search = (query.search as string) || "";
+    const page = Number(query.page) || 1;
+    const limit = Number(query.limit) || 10;
+
+    const skip = (page - 1) * limit;
+
+    const where = search ?
+        {
+            name: {
+                contains: search,
+                mode: "insensitive" as const,
+            },
+        }
+        : {};
+
     const users = await prisma.user.findMany({
+        where,
+        skip,
+        take: limit,
         omit: {
-            password: true
+            password: true,
         },
         orderBy: {
-            createdAt: 'desc'
-        }
-    })
+            createdAt: "desc",
+        },
+    });
 
-    return users
-}
+    const total = await prisma.user.count();
+
+    const activeUsers = await prisma.user.count({
+        where: {
+            status: "ACTIVE",
+        },
+    });
+
+    const suspendedUsers = await prisma.user.count({
+        where: {
+            status: "SUSPENDED",
+        },
+    });
+
+    return {
+        meta: {
+            page,
+            limit,
+            total,
+            totalPage: Math.ceil(total / limit),
+            activeUsers,
+            suspendedUsers
+        },
+        users,
+    };
+};
 
 const updateUserFromDB = async (userId: string, payload: IUpdateUser) => {
     const allowedFields = ["status"];

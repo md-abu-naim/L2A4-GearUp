@@ -5,13 +5,14 @@ import httpStatus from "http-status";
 
 const getAllUsers = async (req: Request, res: Response) => {
     try {
-        const users = await adminServices.getAllUsersFromDB()
+        const query = req.query
+        const users = await adminServices.getAllUsersFromDB(query)
 
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,
             message: 'Users Retrived Successfully',
-            data: { users }
+            data:  users 
         })
 
     } catch (error: any) {
