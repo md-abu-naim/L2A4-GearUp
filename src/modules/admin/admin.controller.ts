@@ -57,7 +57,7 @@ const getAllGears = async (req: Request, res: Response) => {
             success: true,
             statusCode: httpStatus.OK,
             message: 'Gears Retrived Successfully',
-            data: { gears }
+            data: gears 
         })
 
     } catch (error: any) {

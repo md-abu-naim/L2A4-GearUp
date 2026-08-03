@@ -112,10 +112,6 @@ const updateRentalStatusFromDB = async (rentalId: string, providerId: string, pa
         throw new Error("Rental not found");
     }
 
-    // if (rental.gearItem.providerId !== providerId) {
-    //     throw new Error("You are not authorized to update this rental")
-    // }
-
     const result = await prisma.rentalOrder.update({
         where: {
             id: rentalId,

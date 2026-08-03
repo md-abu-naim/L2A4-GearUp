@@ -8,7 +8,7 @@ const router = Router()
 router.get('/users', auth(UserRole.ADMIN), adminController.getAllUsers)
 router.patch('/users/:id', auth(UserRole.ADMIN), adminController.updateUser)
 
-router.get('/gear', auth(UserRole.ADMIN), adminController.getAllUsers)
+router.get('/gear', auth(UserRole.ADMIN), adminController.getAllGears)
 
 router.get('/rentals', auth(UserRole.ADMIN), adminController.getAllRentals)
 

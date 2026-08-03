@@ -49,6 +49,9 @@ const getAllGearsFromDB = async () => {
     const gears = await prisma.gearItem.findMany({
         orderBy: {
             createdAt: 'desc'
+        },
+        include: {
+            provider: true
         }
     })
 
@@ -59,6 +62,9 @@ const getAllRentalsFromDB = async () => {
     const rentals = await prisma.rentalOrder.findMany({
         orderBy: {
             createdAt: 'desc'
+        },
+        include: {
+            gearItem: true
         }
     })
 
