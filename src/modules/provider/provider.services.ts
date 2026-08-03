@@ -33,8 +33,11 @@ const createGearIntoDB = async (payload: IGear, providerId: string) => {
     return gear
 }
 
-const getGearsFromDB = async () => {
+const getGearsFromDB = async (providerId: string) => {
     const gears = await prisma.gearItem.findMany({
+        where: {
+            providerId: providerId,
+        },
         include: {
             provider: {
                 select: {

@@ -28,14 +28,14 @@ const createGear = async (req: Request, res: Response) => {
 
 const getGears = async (req: Request, res: Response) => {
     try {
-
-        const gears = await providerServices.getGearsFromDB()
+        const providerId = req.user?.id
+        const gears = await providerServices.getGearsFromDB(providerId as string)
 
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,
             message: 'Rentals Order Retrived Successfully',
-            data:  gears 
+            data: gears
         })
     } catch (error: any) {
         sendResponse(res, {

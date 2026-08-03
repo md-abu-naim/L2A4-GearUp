@@ -65,6 +65,8 @@ const createPaymentSession = async (rentalId: string, customerId: string) => {
             customerId,
         },
 
+        // success_url: `${config.app_url}/dashboard/payment-success?rentalId=${rental.id}`,
+        // cancel_url: `${config.app_url}/payment-cancel`,
         success_url: `https://gear-up-rentals.vercel.app/dashboard/payment-success?rentalId=${rental.id}`,
         cancel_url: `https://gear-up-rentals.vercel.app/payment-cancel`,
     });
