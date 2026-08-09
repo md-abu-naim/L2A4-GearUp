@@ -26,6 +26,27 @@ const createReview = async (req: Request, res: Response) => {
     }
 }
 
+const getAllReview = async (req: Request, res: Response) => {
+    try {
+
+        const review = await reviewServices.getAllReviewsFromDB()
+
+        sendResponse(res, {
+            statusCode: httpStatus.CREATED,
+            success: true,
+            message: "Review Retrieved successfully",
+            data: review ,
+        });
+    } catch (error: any) {
+        sendResponse(res, {
+            statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: error.message,
+            error: error
+        })
+    }
+}
+
 export const reviewController = {
-    createReview
+    createReview, getAllReview
 } 

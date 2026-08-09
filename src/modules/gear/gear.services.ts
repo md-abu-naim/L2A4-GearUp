@@ -1,5 +1,5 @@
 import { Prisma } from "../../../generated/prisma/client.js";
-import { GearStatus } from "../../../generated/prisma/enums.js"
+import { GearStatus, RentalStatus } from "../../../generated/prisma/enums.js"
 import { prisma } from "../../lib/prisma.js"
 import { IQuery } from "./gear.interface.js";
 
@@ -64,6 +64,53 @@ const getAllGearsFromDB = async (query: IQuery) => {
     return gears
 }
 
+const getFeaturedGearFromDB = async () => {
+    const gear = await prisma.gearItem.findMany({
+        take: 6
+    })
+
+    return gear
+}
+
+const getPopularGearFromDB = async () => {
+    const popular = await prisma.rentalOrder.groupBy({
+        by: ["gearItemId"],
+        where: {
+            status: {
+                in: [RentalStatus.PICKED_UP, RentalStatus.RETURNED],
+            },
+        },
+        _count: {
+            gearItemId: true,
+        },
+        orderBy: {
+            _count: {
+                gearItemId: "desc",
+            },
+        },
+        take: 6,
+    });
+
+    const gearIds = popular.map((item) => item.gearItemId);
+
+    const gears = await prisma.gearItem.findMany({
+        where: {
+            id: {
+                in: gearIds,
+            },
+        },
+    });
+
+
+    return gears.map((gear) => {
+        const countInfo = popular.find((item) => item.gearItemId === gear.id);
+        return {
+            ...gear,
+            totalRented: countInfo?._count.gearItemId || 0,
+        };
+    }).sort((a, b) => b.totalRented - a.totalRented);
+}
+
 const getGearByIdFromDB = async (id: string) => {
     const gear = await prisma.gearItem.findUnique({
         where: {
@@ -84,5 +131,6 @@ const getGearByIdFromDB = async (id: string) => {
 }
 
 export const gearServices = {
-    getAllGearsFromDB, getGearByIdFromDB
+    getAllGearsFromDB, getGearByIdFromDB,
+    getFeaturedGearFromDB, getPopularGearFromDB
 }

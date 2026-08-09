@@ -42,7 +42,40 @@ const createReviewIntoDB = async (customerId: string, payload: { gearItemId: str
     return review
 }
 
+// const getAllReviewsFromDB = async () => {
+//   const reviews = await prisma.review.findMany({
+//     take: 3,
+//     include: {
+//       user: true,
+//       gearItem: true,
+//     },
+//   });
+
+//   return reviews;
+// };
+
+const getAllReviewsFromDB = async () => {
+  const reviews = await prisma.review.findMany({
+    take: 3,
+    include: {
+        user: {
+            select: {
+                name: true,
+                profileImage: true,
+                role: true
+            }
+        },
+        gearItem: {
+            select: {
+                title: true
+            }
+        }
+    }
+  });
+
+  return reviews;
+};
 
 export const reviewServices = {
-    createReviewIntoDB
+    createReviewIntoDB, getAllReviewsFromDB
 }
