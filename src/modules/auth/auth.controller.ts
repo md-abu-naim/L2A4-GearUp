@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import { authServices } from "./auth.services.js"
 import { sendResponse } from "../../utils/sendResponse.js"
 import httpStatus from "http-status";
+import config from "../../config/index.js";
 
 const createUser = async (req: Request, res: Response) => {
     try {
@@ -114,7 +115,43 @@ const getMyProfile = async (req: Request, res: Response) => {
     }
 }
 
+const googleCallback = async (req: Request, res: Response) => {
+    try {
+        const user = req.user;
+
+        if (!user) {
+            return res.redirect(
+                `${config.app_url}/login?error=google-auth-failed`
+            );
+        }
+
+        const { accessToken, refreshToken } =
+            await authServices.createGoogleUserTokens(user);
+
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'lax',
+            maxAge: 1000 * 60 * 60 * 24
+        })
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'lax',
+            maxAge: 1000 * 60 * 60 * 24 * 7
+        })
+
+        return res.redirect(`${config.app_url}`);
+
+    } catch (error) {
+        return res.redirect(
+            `${config.app_url}/login?error=google-auth-failed`
+        );
+    }
+};
+
 export const authController = {
-    createUser, loginUser,
+    createUser, loginUser, googleCallback,
     refreshToken, getMyProfile
 }

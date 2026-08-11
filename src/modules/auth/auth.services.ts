@@ -70,7 +70,7 @@ const loginUserIntoDB = async (payload: ILoginUser) => {
         throw new Error('Your account has been blocked. Pleas contact support')
     }
 
-    const isMatchedPassword = await bcrypt.compare(password, user.password)
+    const isMatchedPassword = await bcrypt.compare(password, user.password as string)
 
     if (!isMatchedPassword) {
         throw new Error('Password is Incorrect')
@@ -138,7 +138,40 @@ const getMyProfileFromDB = async (userId: string) => {
     return user
 }
 
+const createGoogleUserTokens = async (user: {
+    id: string
+    name: string
+    email: string
+    role: any
+}) => {
+
+    const jwtPayload = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+    }
+
+    const accessToken = jwtUtils.createToken(
+        jwtPayload,
+        config.jwt_access_secret,
+        config.jwt_access_expires_in as SignOptions
+    )
+
+    const refreshToken = jwtUtils.createToken(
+        jwtPayload,
+        config.jwt_refresh_secret,
+        config.jwt_refresh_expires_in as SignOptions
+    )
+
+    return {
+        accessToken,
+        refreshToken
+    }
+}
+
 export const authServices = {
     createUserIntoDB, loginUserIntoDB,
-    refreshToken, getMyProfileFromDB
+    refreshToken, getMyProfileFromDB,
+    createGoogleUserTokens
 }

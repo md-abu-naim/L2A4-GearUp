@@ -13,6 +13,7 @@ import { rentalRouters } from "./modules/rental/rental.route.js";
 import { paymentRouters } from "./modules/payment/payment.route.js";
 import { reviewRouters } from "./modules/review/review.route.js";
 import { globalErrorHandler } from "./middleware/globalErrorHandler.js";
+import passport from "./modules/auth/auth.passport.js";
 
 const app: Application = express()
 
@@ -27,6 +28,7 @@ app.use("/api/payment/confirm", express.raw({ type: 'application/json' }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
+app.use(passport.initialize());
 
 app.get('/api', async (req: Request, res: Response) => {
     res.send('Hello. Welcom to my GearUp!')
