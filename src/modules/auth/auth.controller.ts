@@ -115,6 +115,42 @@ const getMyProfile = async (req: Request, res: Response) => {
     }
 }
 
+// const googleCallback = async (req: Request, res: Response) => {
+//     try {
+//         const user = req.user;
+
+//         if (!user) {
+//             return res.redirect(
+//                 `${config.app_url}/login?error=google-auth-failed`
+//             );
+//         }
+
+//         const { accessToken, refreshToken } =
+//             await authServices.createGoogleUserTokens(user);
+
+//         res.cookie("accessToken", accessToken, {
+//             httpOnly: true,
+//             secure: true,
+//             sameSite: "none",
+//             maxAge: 1000 * 60 * 60 * 24,
+//         });
+
+//         res.cookie("refreshToken", refreshToken, {
+//             httpOnly: true,
+//             secure: true,
+//             sameSite: "none",
+//             maxAge: 1000 * 60 * 60 * 24 * 7,
+//         });
+
+//         return res.redirect(`https://gear-up-rentals.vercel.app`);
+
+//     } catch (error) {
+//         return res.redirect(
+//             `https://gear-up-rentals.vercel.app/login?error=google-auth-failed`
+//         );
+//     }
+// };
+
 const googleCallback = async (req: Request, res: Response) => {
     try {
         const user = req.user;
@@ -128,25 +164,32 @@ const googleCallback = async (req: Request, res: Response) => {
         const { accessToken, refreshToken } =
             await authServices.createGoogleUserTokens(user);
 
-        res.cookie("accessToken", accessToken, {
+        const isProduction = process.env.NODE_ENV === "production";
+
+        // Cookie Configuration
+        const cookieOptions = {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
+            secure: isProduction,
+            sameSite: isProduction ? ("none" as const) : ("lax" as const),
             maxAge: 1000 * 60 * 60 * 24,
-        });
+        };
+
+        res.cookie("accessToken", accessToken, cookieOptions);
 
         res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            maxAge: 1000 * 60 * 60 * 24 * 7,
+            ...cookieOptions,
+            maxAge: 1000 * 60 * 60 * 24 * 7, 
         });
 
-        return res.redirect(`https://gear-up-rentals.vercel.app`);
+        // return res.redirect(`${config.app_url}`);
+        return res.redirect(`${config.google_callback_url}`);
 
     } catch (error) {
+        // return res.redirect(
+        //     `${config.app_url}/login?error=google-auth-failed`
+        // );
         return res.redirect(
-            `https://gear-up-rentals.vercel.app/login?error=google-auth-failed`
+            `${config.google_callback_url}/login?error=google-auth-failed`
         );
     }
 };
