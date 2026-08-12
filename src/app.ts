@@ -18,7 +18,7 @@ import passport from "./modules/auth/auth.passport.js";
 const app: Application = express()
 
 app.use(cors({
-    origin: config.app_url,
+    origin: ['http://localhost:3000', 'https://gear-up-rentals.vercel.app'],
     credentials: true
 }))
 

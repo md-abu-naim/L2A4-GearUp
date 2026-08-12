@@ -128,26 +128,24 @@ const googleCallback = async (req: Request, res: Response) => {
         const { accessToken, refreshToken } =
             await authServices.createGoogleUserTokens(user);
 
-        res.cookie('accessToken', accessToken, {
+        res.cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'lax',
-            maxAge: 1000 * 60 * 60 * 24
-        })
+            secure: true,
+            sameSite: "none",
+            maxAge: 1000 * 60 * 60 * 24,
+        });
 
-        res.cookie('refreshToken', refreshToken, {
+        res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'lax',
-            maxAge: 1000 * 60 * 60 * 24 * 7
-        })
+            secure: true,
+            sameSite: "none",
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+        });
 
-        // return res.redirect(`${config.app_url}`);
         return res.redirect(`https://gear-up-rentals.vercel.app`);
 
     } catch (error) {
         return res.redirect(
-            // `${config.app_url}/login?error=google-auth-failed`
             `https://gear-up-rentals.vercel.app/login?error=google-auth-failed`
         );
     }
