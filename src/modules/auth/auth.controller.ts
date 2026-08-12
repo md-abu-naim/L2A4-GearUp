@@ -181,16 +181,16 @@ const googleCallback = async (req: Request, res: Response) => {
             maxAge: 1000 * 60 * 60 * 24 * 7, 
         });
 
-        // return res.redirect(`${config.app_url}`);
-        return res.redirect(`${config.google_callback_url}`);
+        return res.redirect(`${config.app_url}`);
+        // return res.redirect(`${config.google_callback_url}`);
 
     } catch (error) {
-        // return res.redirect(
-        //     `${config.app_url}/login?error=google-auth-failed`
-        // );
         return res.redirect(
-            `${config.google_callback_url}/login?error=google-auth-failed`
+            `${config.app_url}/login?error=google-auth-failed`
         );
+        // return res.redirect(
+        //     `https://gear-up-rentals.vercel.app/login?error=google-auth-failed`
+        // );
     }
 };
 
